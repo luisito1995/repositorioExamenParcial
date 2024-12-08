@@ -1,0 +1,178 @@
+{% extends "layout.html" %}
+
+{% block titulo %}
+    Artículos por Tema
+{% endblock %}
+
+{% block h2 %}
+    Menú
+{% endblock %}
+
+{% block contenido %}
+<div class="container">
+    <div class="top">
+        <!-- Sección izquierda: lista de temas -->
+        <div class="left">
+            <h3>Búsqueda</h3>
+            <div class="search-bar">
+                <form method="GET" action="{% url 'wikiApp:vistaBusqueda' %}">
+                    <input type="text" name="query" placeholder="Buscar artículos..." style="width: 100%; padding: 10px;" required>
+                    <button type="submit">Buscar</button>
+                </form>
+            </div>
+            <ul id="tema-list">
+                {% for temaInfo in temasTotales %}
+                    <li>
+                        <a href="{% url 'wikiApp:articuloxTema' tema_id=temaInfo.id %}" class="tema-link">
+                            {{ temaInfo.nombreTema }}
+                        </a>
+                    </li>
+                {% empty %}
+                    <p>No hay temas registrados.</p>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Sección central: artículos del tema seleccionado -->
+        <div class="center">
+            <h2>Artículos Asociados</h2>
+            <ul id="articulo-list">
+                {% for articulo in articulosFiltrados %}
+                    <li>
+                        <h4>
+                            <a href="#" 
+                               onclick="showModal('{{ articulo.tituloArticulo }}', '{{ articulo.contenidoArticulo }}', '{{ articulo.tema.nombreTema }}')">
+                                {{ articulo.tituloArticulo }}
+                            </a>
+                        </h4>
+                        <p>{{ articulo.contenidoArticulo }}</p>
+                    </li>
+                {% empty %}
+                    <p>No hay artículos asociados a este tema.</p>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Sección derecha: layout heredado -->
+        <div class="right">
+            {{ block.super }}
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="articleModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h3 id="modal-title"></h3>
+        <h5 id="modal-tema" style="color: gray; font-weight: normal;"></h5>
+        <p id="modal-content"></p>
+    </div>
+</div>
+
+<!-- CSS del Modal -->
+<style>
+    .container {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+    .top {
+        display: flex;
+        flex: 1;
+    }
+    .left {
+        flex: 1;
+        border-right: 1px solid #ccc;
+        padding: 20px;
+    }
+    .center {
+        flex: 2;
+        padding: 20px;
+    }
+    .right {
+        flex: 1;
+        padding: 20px;
+    }
+    .search-bar {
+        margin-bottom: 20px;
+    }
+    ul {
+        list-style: none;
+        padding: 0;
+    }
+    li {
+        margin: 10px 0;
+    }
+    /* a {
+        text-decoration: none;
+        color: #007BFF;
+    }
+    a:hover {
+        text-decoration: underline;
+    } */
+    button {
+        display: block;
+        margin: 10px auto;
+        padding: 10px;
+        background-color: #007BFF;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+    button:hover {
+        background-color: #0056b3;
+    }
+    .modal {
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
+    }
+    .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 50%;
+        border-radius: 10px;
+    }
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+</style>
+
+<!-- JavaScript para el Modal -->
+<script>
+    function showModal(titulo, contenido, tema) {
+        // Asigna los datos al contenido del modal
+        document.getElementById('modal-tema').textContent = "Tema: " + tema;
+        document.getElementById('modal-title').textContent = titulo;
+        document.getElementById('modal-content').textContent = contenido;
+
+        // Muestra el modal
+        document.getElementById('articleModal').style.display = "block";
+    }
+
+    function closeModal() {
+        // Oculta el modal
+        document.getElementById('articleModal').style.display = "none";
+    }
+</script>
+{% endblock %}
+
+

@@ -1,0 +1,135 @@
+{% extends "layout.html" %}
+
+{% block titulo %}
+    Crear nuevo artículo
+{% endblock %}
+
+{% block h2 %}
+    Menú
+{% endblock %}
+
+{% block contenido %}
+<div class="container">
+    <div class="top">
+        <div class="left">
+            <h3>Búsqueda</h3>
+            <div class="search-bar">
+                <form method="GET" action="{% url 'wikiApp:vistaBusqueda' %}">
+                    <input type="text" name="query" placeholder="Buscar artículos..." style="width: 100%; padding: 10px;" required>
+                    <button type="submit">Buscar</button>
+                </form>
+            </div>
+            <ul id="tema-list">
+                {% for temaInfo in temasTotales %}
+                    <li>
+                        <a href="{% url 'wikiApp:articuloxTema' tema_id=temaInfo.id %}" class="tema-link">
+                            {{ temaInfo.nombreTema }}
+                        </a>
+                    </li>
+                {% empty %}
+                    <p>No hay temas registrados.</p>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="right">
+            <h1>Registrar nuevos artículos</h1>
+            <form method="POST" action="{% url 'wikiApp:nuevoArticulo' %}">
+                {% csrf_token %}
+                <div>
+                    <label for="nombreTema">Título del artículo:</label>
+                    <input type="text" id="tituloArticulo" name="tituloArticulo" required>
+                </div>
+                <div>
+                    <label for="tema">Seleccionar Tema:</label>
+                    <select name="tema" id="tema" required>
+                        {% for tema in temasTotales %}
+                            <option value="{{ tema.id }}">{{ tema.nombreTema }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label for="contenidoArticulo">Contenido  del artículo:</label>
+                    <textarea id="contenidoArticulo" name="contenidoArticulo" required></textarea>
+                </div>
+                <button type="submit">Registrar artículo</button>
+            </form>
+
+        </div>
+    </div>
+    <div class="bottom">
+        <!-- Contenido principal heredado del layout -->
+        {{ block.super }}
+    </div>
+</div>
+
+<script>
+    function crearTema() {
+        window.location.href = "{% url 'wikiApp:nuevoTema' %}";
+    }
+
+    function crearArticulo() {
+        window.location.href = "{% url 'wikiApp:nuevoArticulo' %}";
+    }
+</script>
+
+<style>
+    .container {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+    .top {
+        display: flex;
+        flex: 1;
+    }
+    .left {
+        flex: 1;
+        border-right: 1px solid #ccc;
+        padding: 20px;
+    }
+    .right {
+        flex: 2;
+        padding: 20px;
+        text-align: center;
+    }
+    .bottom {
+        border-top: 1px solid #ccc;
+        padding: 20px;
+    }
+    .search-bar {
+        margin-bottom: 20px;
+    }
+    ul {
+        list-style: none;
+        padding: 0;
+    }
+    li {
+        margin: 10px 0;
+    }
+    button {
+        display: block;
+        margin: 20px auto;
+        padding: 10px;
+        background-color: #007BFF;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+    button:hover {
+        background-color: #0056b3;
+    }
+
+    h1 {
+    margin-bottom: 70px; /*  */
+    }
+
+    input {
+    margin-bottom: 15px; /*  */
+    }
+
+    select {
+    margin-bottom: 15px; /*  */
+    }
+
+</style>
+{% endblock %}

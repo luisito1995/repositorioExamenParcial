@@ -1,0 +1,109 @@
+{% extends "layout.html" %}
+
+{% block titulo %}
+    Directorio
+{% endblock %}
+
+{% block h2 %}
+    Menú
+{% endblock %}
+
+{% block contenido %}
+<div class="container">
+    <div class="top">
+        <div class="left">
+            <h3>Búsqueda</h3>
+            <div class="search-bar">
+                <form method="GET" action="{% url 'wikiApp:vistaBusqueda' %}">
+                    <input type="text" name="query" placeholder="Buscar artículos..." style="width: 100%; padding: 10px;" required>
+                    <button type="submit">Buscar</button>
+                </form>
+            </div>
+            <ul id="tema-list">
+                {% for temaInfo in temasTotales %}
+                    <li>
+                        <a href="{% url 'wikiApp:articuloxTema' tema_id=temaInfo.id %}" class="tema-link">
+                            {{ temaInfo.nombreTema }}
+                        </a>
+                    </li>
+                {% empty %}
+                    <p>No hay temas registrados.</p>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="right">
+            <h1>Repositorio de Proyectos</h1>
+            <button onclick="crearTema()">Crear nuevo tema</button>
+            <button onclick="crearArticulo()">Crear nuevo artículo</button>
+        </div>
+    </div>
+    <div class="bottom">
+        <!-- Contenido principal heredado del layout -->
+        {{ block.super }}
+    </div>
+</div>
+
+<script>
+    function crearTema() {
+        window.location.href = "{% url 'wikiApp:nuevoTema' %}";
+    }
+
+    function crearArticulo() {
+        window.location.href = "{% url 'wikiApp:nuevoArticulo' %}";
+    }
+</script>
+
+<style>
+    .container {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+    .top {
+        display: flex;
+        flex: 1;
+    }
+    .left {
+        flex: 1;
+        border-right: 1px solid #ccc;
+        padding: 20px;
+    }
+    .right {
+        flex: 2;
+        padding: 20px;
+        text-align: center;
+    }
+    .bottom {
+        border-top: 1px solid #ccc;
+        padding: 20px;
+    }
+    .search-bar {
+        margin-bottom: 20px;
+    }
+    ul {
+        list-style: none;
+        padding: 0;
+    }
+    li {
+        margin: 10px 0;
+    }
+    button {
+        display: block;
+        margin: 10px auto;
+        padding: 10px;
+        background-color: #007BFF;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+    button:hover {
+        background-color: #0056b3;
+    }
+
+    h1 {
+    margin-bottom: 100px; /*  */
+    }
+</style>
+{% endblock %}
+
+

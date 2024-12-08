@@ -1,0 +1,101 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block titulo %}Mi Plataforma{% endblock %}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: row-reverse; /* Ajusta la barra al lado derecho */
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #333;
+            color: white;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            right: 0; /* Mueve la barra al lado derecho */
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+            background-color: #444;
+            font-size: 1.5em;
+        }
+
+        .menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex-grow: 1;
+        }
+
+        .menu li {
+            border-bottom: 1px solid #555;
+        }
+
+        .menu a {
+            text-decoration: none;
+            color: white;
+            display: block;
+            padding: 15px;
+            transition: background-color 0.3s ease;
+        }
+
+        .menu a:hover {
+            background-color: #575757;
+        }
+
+        .content {
+            margin-right: 250px; /* Ajusta el margen del contenido para dar espacio a la barra */
+            padding: 20px;
+            flex-grow: 1;
+        }
+
+        /* footer {
+            text-align: center;
+            background-color: #444;
+            color: white;
+            padding: 10px 0;
+            position: absolute;
+            bottom: 0;
+            width: calc(100% - 250px);
+            margin-right: 250px; 
+        } */
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Menú</h2>
+        <ul class="menu">
+            <li><a href="{% url 'wikiApp:vistaPrincipal' %}">VISTA PRINCIPAL</a></li>
+            <li><a href="{% url 'wikiApp:nuevoTema' %}">Registrar Tema</a></li>
+            <li><a href="{% url 'wikiApp:nuevoArticulo' %}">Registrar Artículo</a></li>
+            <li><a href="{% url 'wikiApp:articuloxTema' tema_id=1 %}">Artículos por tema</a></li>
+            <li><a href="{% url 'wikiApp:vistaArticulos' %}">Ver Artículos</a></li>
+            <li><a href="{% url 'wikiApp:vistaBusqueda' %}">Buscar Artículo</a></li>
+        </ul>
+    </div>
+    <div class="content">
+        {% block h2 %}
+        <h2>Bienvenido</h2>
+        {% endblock %}
+        {% block contenido %}
+        <!-- <p>Contenido principal aquí.</p> -->
+        {% endblock %}
+    </div>
+    <!-- <footer>
+        <p>Mi Plataforma © 2024</p>
+    </footer> -->
+</body>
+</html>
